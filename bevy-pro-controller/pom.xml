@@ -1,0 +1,20 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.bernerbits.vandy.bevypro</groupId>
+		<artifactId>bevy-pro</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+	<groupId>com.bernerbits.vandy.bevypro.controller</groupId>
+	<artifactId>bevy-pro-controller</artifactId>
+	<name>Bevy-Pro(TM) Controller</name>
+	<description>Main controller library for Bevy-Pro(TM) Beverage Dispenser Suite</description>
+	<dependencies>
+		<dependency>
+			<groupId>com.bernerbits.vandy.bevypro.hardware</groupId>
+			<artifactId>bevy-pro-hardware</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+	</dependencies>
+</project>
