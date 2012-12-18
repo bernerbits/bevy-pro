@@ -55,6 +55,7 @@ public class SwingHardwareSimulator extends JFrame {
 		// Main window
 		super("Bevy-Pro Simulator");
 		setSize(1000,300);
+		setAlwaysOnTop(true);
 		getContentPane().setLayout(new BorderLayout(2,2));
 		
 		JPanel mainPanel = new JPanel();
