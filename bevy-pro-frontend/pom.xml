@@ -58,6 +58,17 @@
 			<artifactId>freemarker</artifactId>
 			<version>2.3.19</version>
 		</dependency>
+		<!-- Jackson for JSON format -->
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-core-asl</artifactId>
+			<version>1.9.9</version>
+		</dependency>		
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-mapper-asl</artifactId>
+			<version>1.9.9</version>
+		</dependency>		            
 		<!-- Local project dependencies -->
 		<dependency>
 			<groupId>com.bernerbits.vandy.bevypro.controller</groupId>
