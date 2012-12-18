@@ -80,8 +80,14 @@ public class HardwareSimulator implements HardwareSimulationService {
 
 	@Override
 	public void refund(int type) {
-		for(HardwareEventHandler handler : handlers) {
-			handler.handleCurrencyRefund(QUARTER,getCurrencyValue(type));
+		switch(type) {
+		case NICKEL:
+		case DIME:
+		case QUARTER:
+		case DOLLAR:
+			for(HardwareEventHandler handler : handlers) {
+				handler.handleCurrencyRefund(type,getCurrencyValue(type));
+			}
 		}
 	}
 
@@ -97,8 +103,14 @@ public class HardwareSimulator implements HardwareSimulationService {
 	
 	@Override
 	public void insertCurrency(int type) {
-		for(HardwareEventHandler handler : handlers) {
-			handler.handleCurrencyDeposit(QUARTER,getCurrencyValue(type));
+		switch(type) {
+		case NICKEL:
+		case DIME:
+		case QUARTER:
+		case DOLLAR:
+			for(HardwareEventHandler handler : handlers) {
+				handler.handleCurrencyDeposit(type,getCurrencyValue(type));
+			}
 		}
 	}
 }

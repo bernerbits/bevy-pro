@@ -31,30 +31,19 @@ public class HardwareSimulatorTest {
 		
 		verify(handler, times(4)).handleSodaChange();
 	}
-	
-	/**
-	 * Currency amount can be set, and fires an event when modified.
-	 */
-	@Test public void testSetCurrency() {
-		HardwareSimulator simulator = new HardwareSimulator();
-		HardwareEventHandler handler = mock(HardwareEventHandler.class);
-		simulator.registerHardwareEventHandler(handler);
-		
-		simulator.setCurrency(HardwareSimulator.QUARTER, 100);
-		assertEquals(100, simulator.countCurrency(HardwareSimulator.QUARTER));
-		
-		verify(handler, times(1)).handleCurrencyChange();
-		verify(handler, never()).handleCurrencyDeposit(anyInt(), anyInt());
-	}
 
 	/**
-	 * Target hardware uses only quarters.
+	 * Target hardware uses nickels, dimes, quarters and dollar bills.
 	 */
-	@Test public void testOnlyQuarters() {
+	@Test public void testCurrencyTypes() {
 		HardwareSimulator simulator = new HardwareSimulator();
 		
-		assertArrayEquals(new int[]{HardwareSimulator.QUARTER}, simulator.listCurrencyTypes());
+		assertArrayEquals(new int[]{HardwareSimulator.NICKEL,HardwareSimulator.DIME,HardwareSimulator.QUARTER,HardwareSimulator.DOLLAR}, 
+				simulator.listCurrencyTypes());
+		assertEquals(5, simulator.getCurrencyValue(HardwareSimulator.NICKEL));
+		assertEquals(10, simulator.getCurrencyValue(HardwareSimulator.DIME));
 		assertEquals(25, simulator.getCurrencyValue(HardwareSimulator.QUARTER));
+		assertEquals(100, simulator.getCurrencyValue(HardwareSimulator.DOLLAR));
 	}
 
 	/**
@@ -76,22 +65,57 @@ public class HardwareSimulatorTest {
 	}
 
 	/**
-	 * Inserting a quarter increases quarter count by 1, and fires an event
+	 * Inserting a dollar fires an event
+	 */
+	@Test public void testInsertDollar() {
+		HardwareSimulator simulator = new HardwareSimulator();
+		HardwareEventHandler handler = mock(HardwareEventHandler.class);
+		simulator.registerHardwareEventHandler(handler);
+		
+		simulator.insertCurrency(HardwareSimulator.DOLLAR);
+		
+		verify(handler, times(1)).handleCurrencyDeposit(HardwareSimulator.DOLLAR, 100);
+	}
+	
+	/**
+	 * Inserting a quarter fires an event
 	 */
 	@Test public void testInsertQuarter() {
 		HardwareSimulator simulator = new HardwareSimulator();
 		HardwareEventHandler handler = mock(HardwareEventHandler.class);
 		simulator.registerHardwareEventHandler(handler);
 		
-		assertEquals(0,simulator.countCurrency(HardwareSimulator.QUARTER));
-		
 		simulator.insertCurrency(HardwareSimulator.QUARTER);
 		
-		assertEquals(1,simulator.countCurrency(HardwareSimulator.QUARTER));
 		verify(handler, times(1)).handleCurrencyDeposit(HardwareSimulator.QUARTER, 25);
-		verify(handler, never()).handleCurrencyChange();
 	}
 	
+	/**
+	 * Inserting a dime fires an event
+	 */
+	@Test public void testInsertDime() {
+		HardwareSimulator simulator = new HardwareSimulator();
+		HardwareEventHandler handler = mock(HardwareEventHandler.class);
+		simulator.registerHardwareEventHandler(handler);
+		
+		simulator.insertCurrency(HardwareSimulator.DIME);
+		
+		verify(handler, times(1)).handleCurrencyDeposit(HardwareSimulator.DIME, 10);
+	}
+	
+	/**
+	 * Inserting a nickel fires an event
+	 */
+	@Test public void testInsertNickel() {
+		HardwareSimulator simulator = new HardwareSimulator();
+		HardwareEventHandler handler = mock(HardwareEventHandler.class);
+		simulator.registerHardwareEventHandler(handler);
+		
+		simulator.insertCurrency(HardwareSimulator.NICKEL);
+		
+		verify(handler, times(1)).handleCurrencyDeposit(HardwareSimulator.NICKEL, 5);
+	}
+
 	/**
 	 * Inserting a coin with an invalid type does nothing.
 	 */
@@ -100,49 +124,22 @@ public class HardwareSimulatorTest {
 		HardwareEventHandler handler = mock(HardwareEventHandler.class);
 		simulator.registerHardwareEventHandler(handler);
 		
-		assertEquals(0,simulator.countCurrency(-1));
-		
 		simulator.insertCurrency(-1);
 		
-		assertEquals(0,simulator.countCurrency(-1));
 		verify(handler, never()).handleCurrencyDeposit(anyInt(), anyInt());
-		verify(handler, never()).handleCurrencyChange();
 	}
 	
 	/**
-	 * Inserting a coin with an invalid type does nothing.
+	 * Refunding a coin with an invalid type does nothing.
 	 */
 	@Test public void testRefundBadCoin() {
 		HardwareSimulator simulator = new HardwareSimulator();
 		HardwareEventHandler handler = mock(HardwareEventHandler.class);
 		simulator.registerHardwareEventHandler(handler);
 		
-		simulator.setCurrency(-1, 10);
-		verify(handler, never()).handleCurrencyChange();
-		assertEquals(0,simulator.countCurrency(-1));
-		
 		simulator.refund(-1);
 		
-		assertEquals(0,simulator.countCurrency(-1));
 		verify(handler, never()).handleCurrencyDeposit(anyInt(), anyInt());
-		verify(handler, never()).handleCurrencyChange();
-	}
-	
-	/**
-	 * Setting coin count on an invalid type does nothing.
-	 */
-	@Test public void testSetBadCoin() {
-		HardwareSimulator simulator = new HardwareSimulator();
-		HardwareEventHandler handler = mock(HardwareEventHandler.class);
-		simulator.registerHardwareEventHandler(handler);
-		
-		assertEquals(0,simulator.countCurrency(-1));
-		
-		simulator.setCurrency(-1,100);
-		
-		assertEquals(0,simulator.countCurrency(-1));
-		verify(handler, never()).handleCurrencyDeposit(anyInt(), anyInt());
-		verify(handler, never()).handleCurrencyChange();
 	}
 
 	/**
@@ -153,19 +150,9 @@ public class HardwareSimulatorTest {
 		HardwareEventHandler handler = mock(HardwareEventHandler.class);
 		simulator.registerHardwareEventHandler(handler);
 		
-		assertEquals(0,simulator.countCurrency(HardwareSimulator.QUARTER));
-		
-		simulator.insertCurrency(HardwareSimulator.QUARTER);
-		
-		assertEquals(1,simulator.countCurrency(HardwareSimulator.QUARTER));
-		verify(handler, times(1)).handleCurrencyDeposit(HardwareSimulator.QUARTER, 25);
-		
 		simulator.refund(HardwareSimulator.QUARTER);
 		
-		assertEquals(0,simulator.countCurrency(HardwareSimulator.QUARTER));
 		verify(handler, times(1)).handleCurrencyRefund(HardwareSimulator.QUARTER, 25);
-		
-		verify(handler, never()).handleCurrencyChange();
 	}
 	
 	/**
@@ -228,23 +215,4 @@ public class HardwareSimulatorTest {
 		verify(handler, never()).handleSodaChange();
 	}
 	
-	/**
-	 * Refunding a quarter when there are no quarters does nothing.
-	 */
-	@Test public void testRefundEmptyQuarters() {
-		HardwareSimulator simulator = new HardwareSimulator();
-		HardwareEventHandler handler = mock(HardwareEventHandler.class);
-		simulator.registerHardwareEventHandler(handler);
-		
-		simulator.setCurrency(HardwareSimulator.QUARTER, 0);
-		assertEquals(0, simulator.countVolume(0));
-		verify(handler, times(1)).handleCurrencyChange();
-		reset(handler);
-		
-		simulator.refund(HardwareSimulator.QUARTER); 
-		assertEquals(0, simulator.countVolume(0));
-		
-		verify(handler, never()).handleCurrencyRefund(anyInt(), anyInt());
-		verify(handler, never()).handleCurrencyChange();
-	}
 }
