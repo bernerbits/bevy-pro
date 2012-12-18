@@ -31,7 +31,7 @@ public class BeverageMachineController {
 	}
 
 	@RequestMapping(value="/dispense/{id}.ftl",produces="text/html")
-	public String dispense(@PathVariable("id") String beverageId) {
+	public String dispense(@PathVariable("id") int beverageId) {
 		Beverage beverage = beverageDao.getBeverage(beverageId);
 		hardwareController.check(beverage);
 		if(beverage.isSoldOut()) {

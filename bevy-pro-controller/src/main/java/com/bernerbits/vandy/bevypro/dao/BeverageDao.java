@@ -8,6 +8,6 @@ public interface BeverageDao {
 
 	List<Beverage> getBeverages();
 
-	Beverage getBeverage(String id);
+	Beverage getBeverage(int id);
 
 }

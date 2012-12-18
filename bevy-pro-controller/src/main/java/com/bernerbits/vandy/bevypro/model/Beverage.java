@@ -1,7 +1,7 @@
 package com.bernerbits.vandy.bevypro.model;
 
 public class Beverage {
-	private String id;
+	private int id;
 	private String imageUrl;
 	private String name;
 	private int unitPrice;
@@ -11,7 +11,7 @@ public class Beverage {
 	public Beverage() {
 	}
 
-	public Beverage(String id, String imageUrl, String name, int unitPrice, int slot, boolean soldOut) {
+	public Beverage(int id, String imageUrl, String name, int unitPrice, int slot, boolean soldOut) {
 		this.id = id;
 		this.imageUrl = imageUrl;
 		this.name = name;
@@ -20,11 +20,11 @@ public class Beverage {
 		this.soldOut = soldOut;
 	}
 
-	public String getId() {
+	public int getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 
