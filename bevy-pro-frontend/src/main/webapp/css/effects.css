@@ -1,0 +1,8 @@
+
+li.beverage-button a:active img {
+	-webkit-filter: brightness(0.5);
+}
+
+li.beverage-button.sold-out img, li.beverage-button.sold-out a:active img {
+	-webkit-filter: grayscale(1) brightness(-0.25);
+}

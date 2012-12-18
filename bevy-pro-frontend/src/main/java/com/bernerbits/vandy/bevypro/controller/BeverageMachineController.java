@@ -33,9 +33,12 @@ public class BeverageMachineController {
 	@RequestMapping(value="/dispense/{id}.ftl",produces="text/html")
 	public String dispense(@PathVariable("id") String beverageId, ModelMap model) {
 		Beverage beverage = beverageDao.getBeverage(beverageId);
-		if(hardwareController.getCredit() < beverage.getUnitPrice()) {
+		hardwareController.check(beverage);
+		if(beverage.isSoldOut()) {
+			message = beverage.getName() + " is sold out.";
+		} else if(hardwareController.getCredit() < beverage.getUnitPrice()) {
 			int difference = beverage.getUnitPrice() - hardwareController.getCredit();
-			message = "Insufficient Credit. Please insert " + difference + "&cent;.";
+			message = "Please insert " + difference + "&cent;.";
 		} else {
 			// purchaseController.purchase(beverage); // Track purchase
 			hardwareController.dispense(beverage);
