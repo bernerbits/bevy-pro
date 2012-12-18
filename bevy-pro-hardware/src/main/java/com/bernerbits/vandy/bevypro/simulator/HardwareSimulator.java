@@ -20,7 +20,6 @@ public class HardwareSimulator implements HardwareSimulationService {
 
 	protected static final int SODA_SLOTS = 4; // 4 soda slots.
 	
-	private ItemCounter quarters = new ItemCounter();
 	private ItemCounter[] sodas;
 	
 	public HardwareSimulator() {
@@ -40,29 +39,27 @@ public class HardwareSimulator implements HardwareSimulationService {
 	}
 
 	@Override
-	public int countCurrency(int type) {
-		switch(type) {
-		case QUARTER: return quarters.get();
-		default: return 0;
-		}
-	}
-
-	@Override
 	public int countVolume(int slot) {
 		return sodas[slot].get();
 	}
 
-	/*package-private*/ static final int QUARTER = 1;
+	/*package-private*/ static final int NICKEL = 1;
+	/*package-private*/ static final int DIME = 2;
+	/*package-private*/ static final int QUARTER = 3;
+	/*package-private*/ static final int DOLLAR = 4;
 	
 	@Override
 	public int[] listCurrencyTypes() {
-		return new int[]{QUARTER};
+		return new int[]{NICKEL,DIME,QUARTER,DOLLAR};
 	}
 
 	@Override
 	public int getCurrencyValue(int type) {
 		switch(type) {
+		case NICKEL: return 5;
+		case DIME: return 10;
 		case QUARTER: return 25;
+		case DOLLAR: return 100;
 		default: return 0;
 		}
 	}
@@ -83,28 +80,12 @@ public class HardwareSimulator implements HardwareSimulationService {
 
 	@Override
 	public void refund(int type) {
-		switch(type) {
-		case QUARTER: 
-			if(quarters.takeOne()) {
-				for(HardwareEventHandler handler : handlers) {
-					handler.handleCurrencyRefund(QUARTER,25);
-				}
-			}
+		for(HardwareEventHandler handler : handlers) {
+			handler.handleCurrencyRefund(QUARTER,getCurrencyValue(type));
 		}
 	}
 
 	/* Simulator Methods */
-	
-	@Override
-	public void setCurrency(int type, int count) {
-		switch(type) {
-		case QUARTER: 
-			quarters.set(count);
-			for(HardwareEventHandler handler : handlers) {
-				handler.handleCurrencyChange();
-			}
-		}
-	}
 	
 	@Override
 	public void setSodas(int slot, int count) {
@@ -116,12 +97,8 @@ public class HardwareSimulator implements HardwareSimulationService {
 	
 	@Override
 	public void insertCurrency(int type) {
-		switch(type) {
-		case QUARTER: 
-			quarters.addOne();
-			for(HardwareEventHandler handler : handlers) {
-				handler.handleCurrencyDeposit(QUARTER,25);
-			}
+		for(HardwareEventHandler handler : handlers) {
+			handler.handleCurrencyDeposit(QUARTER,getCurrencyValue(type));
 		}
 	}
 }

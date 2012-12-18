@@ -43,7 +43,6 @@ public class SwingHardwareSimulator extends JFrame {
 	
 	protected final JLabel[] currencyLabels;
 	protected final JLabel[] sodaLabels;
-	protected final JSpinner[] currencySpinners;
 	protected final JSpinner[] sodaSpinners;
 	protected final JButton[] currencyInsertButtons;
 	protected final JButton[] currencyEjectButtons;
@@ -55,7 +54,7 @@ public class SwingHardwareSimulator extends JFrame {
 	public SwingHardwareSimulator(final HardwareSimulationService hardware) {
 		// Main window
 		super("Bevy-Pro Simulator");
-		setSize(900,300);
+		setSize(1000,300);
 		getContentPane().setLayout(new BorderLayout(2,2));
 		
 		JPanel mainPanel = new JPanel();
@@ -75,26 +74,17 @@ public class SwingHardwareSimulator extends JFrame {
 			currencyPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),"Coin/Bill slots"));
 			
 			int currencyCount = hardware.listCurrencyTypes().length;
-			GridLayout currencyGrid = new GridLayout(4,currencyCount,2,2);
+			GridLayout currencyGrid = new GridLayout(3,currencyCount,2,2);
 			currencyPanel.setLayout(currencyGrid);
 			
 			currencyLabels = new JLabel[currencyCount];
-			currencySpinners = new JSpinner[currencyCount];
 			currencyInsertButtons = new JButton[currencyCount];
 			currencyEjectButtons = new JButton[currencyCount];
 			for(int i = 0; i < currencyCount; i++) {
 				final int currencyType = hardware.listCurrencyTypes()[i];
 				final JLabel label = new JLabel("" + hardware.getCurrencyValue(currencyType));
-				final JSpinner spinner = new JSpinner(new SpinnerNumberModel(hardware.countCurrency(currencyType),0,Integer.MAX_VALUE,1));
 				final JButton insertButton = new JButton("Insert"); 
 				final JButton ejectButton = new JButton("Eject"); 
-				
-				spinner.addChangeListener(new ChangeListener() {
-					@Override
-					public void stateChanged(ChangeEvent e) {
-						hardware.setCurrency(currencyType, (Integer)spinner.getValue());
-					}
-				});
 				
 				insertButton.addActionListener(new ActionListener() {
 					@Override
@@ -109,39 +99,14 @@ public class SwingHardwareSimulator extends JFrame {
 						hardware.refund(currencyType);
 					}
 				});
-
-				hardware.registerHardwareEventHandler(new HardwareEventAdapter() {
-					@Override
-					public void handleCurrencyDeposit(int type, int value) {
-						if(type == currencyType) {
-							spinner.setValue(hardware.countCurrency(type));
-						}
-					}
-					
-					@Override
-					public void handleCurrencyRefund(int type, int value) {
-						if(type == currencyType) {
-							spinner.setValue(hardware.countCurrency(type));
-						}
-					}
-					
-					@Override
-					public void handleCurrencyChange() {
-						spinner.setValue(hardware.countCurrency(currencyType));
-					}
-				});
 				
 				currencyLabels[i] = label;
-				currencySpinners[i] = spinner;
 				currencyInsertButtons[i] = insertButton;
 				currencyEjectButtons[i] = ejectButton;
 			}
 			
 			for(JLabel label : currencyLabels) {
 				currencyPanel.add(label);
-			}
-			for(JSpinner spinner: currencySpinners) {
-				currencyPanel.add(spinner);
 			}
 			for(JButton button: currencyInsertButtons) {
 				currencyPanel.add(button);
@@ -247,17 +212,6 @@ public class SwingHardwareSimulator extends JFrame {
 					eventLogArea.append("Deposited coin/bill worth " + value + "\n");
 				}
 				
-				@Override
-				public void handleCurrencyChange() {
-					StringWriter sw = new StringWriter();
-					sw.append("Currency amounts changed: ");
-					for(int type : hardware.listCurrencyTypes()) {
-						sw.append(hardware.countCurrency(type) + " coins/bills worth " + hardware.getCurrencyValue(type) + ", ");
-					}	
-					sw.append("\n");
-					sw.flush();
-					eventLogArea.append(sw.toString());
-				}
 			});
 			
 			JScrollPane scroll = new JScrollPane(eventLogArea,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);

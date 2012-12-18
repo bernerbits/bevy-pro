@@ -32,14 +32,6 @@ public abstract class HardwareEventAdapter implements HardwareEventHandler {
 	@Override public void handleDispense(int slot, int amount) {}
 	
 	/**
-	 * Method called from the hardware layer when currency count changes, other than normal coin/bill 
-	 * insertion (i.e. when a technician opens the machine and removes coins/bills). <br/>
-	 * 
-	 * Use the MicrocontrollerService to determine new counts.
-	 */
-	@Override public void handleCurrencyChange() {}
-	
-	/**
 	 * Method called from the hardware layer when soda count changes, other than dispensing
 	 * soda (i.e. when a technician opens the machine and adds sodas, or when a syrup container 
 	 * is replaced). <br/>

@@ -10,8 +10,6 @@ import com.bernerbits.vandy.bevypro.HardwareService;
  */
 public interface HardwareSimulationService extends HardwareService {
 
-	void setCurrency(int type, int count);
-
 	void setSodas(int slot, int count);
 
 	void insertCurrency(int type);

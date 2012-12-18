@@ -13,6 +13,7 @@
 			</#list>
 		</ul>
 		<div id="credit-div">Credit: <span id="credit-span">${credit}</span>&cent;</div>
+		<div id="refund-button"><a href="./refund.ftl" class="<#if credit == 0>inactive</#if>">Refund</a></div>
 		<div id="message-div">${message}</div>
 	</body>
 </html>

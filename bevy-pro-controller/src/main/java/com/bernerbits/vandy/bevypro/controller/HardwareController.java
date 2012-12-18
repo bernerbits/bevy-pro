@@ -34,4 +34,11 @@ public interface HardwareController {
 	 */
 	void dispense(Beverage beverage);
 
+	/**
+	 * Refunds the deposited credit.
+	 * 
+	 * @param beverage
+	 */
+	void refund();
+
 }

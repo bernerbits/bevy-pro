@@ -31,7 +31,7 @@ public class BeverageMachineController {
 	}
 
 	@RequestMapping(value="/dispense/{id}.ftl",produces="text/html")
-	public String dispense(@PathVariable("id") String beverageId, ModelMap model) {
+	public String dispense(@PathVariable("id") String beverageId) {
 		Beverage beverage = beverageDao.getBeverage(beverageId);
 		hardwareController.check(beverage);
 		if(beverage.isSoldOut()) {
@@ -43,6 +43,18 @@ public class BeverageMachineController {
 			// purchaseController.purchase(beverage); // Track purchase
 			hardwareController.dispense(beverage);
 			message = "Vending...";
+		}
+		return "redirect:/index.ftl";
+	}
+	
+	@RequestMapping(value="/refund.ftl",produces="text/html")
+	public String refund() {
+		int credit = hardwareController.getCredit();
+		if(credit == 0) {
+			message = "No credit to refund.";
+		} else {
+			hardwareController.refund();
+			message = "Refunded " + credit + "&cent;.";
 		}
 		return "redirect:/index.ftl";
 	}

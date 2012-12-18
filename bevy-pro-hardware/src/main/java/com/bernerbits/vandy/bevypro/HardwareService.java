@@ -18,18 +18,6 @@ public interface HardwareService {
 	void registerHardwareEventHandler(HardwareEventHandler handler);
 		
 	/**
-	 * Reports the number of coins/bills currently available for the given type. <br/>
-	 * 
-	 * The meaning of the type value is dependent on the hardware module used,
-	 * as coin/bill codes may vary by hardware module, and modules may support 
-	 * different currencies by country. <br/>
-	 * 
-	 * @param type The type of coin/bill to count. 
-	 * @return The number of coins/bills present.
-	 */
-	int countCurrency(int type);
-	
-	/**
 	 * Refunds one coin/bill of the given type. <br/>
 	 * 
 	 * The meaning of the type value is dependent on the hardware module used,
