@@ -1,4 +1,4 @@
-package com.bernerbits.vandy.bevypro.controller.beans;
+package com.bernerbits.vandy.bevypro.model;
 
 /**
  * Simple value object representing a currency type. 

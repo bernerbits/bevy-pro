@@ -1,0 +1,39 @@
+body {
+	position:relative;
+	font-family: Frutiger, "Frutiger Linotype", Univers, Calibri, "Gill Sans", "Gill Sans MT", "Myriad Pro", Myriad, "DejaVu Sans Condensed", "Liberation Sans", "Nimbus Sans L", Tahoma, Geneva, "Helvetica Neue", Helvetica, Arial, sans-serif;
+	overflow: hidden;
+}
+
+h1 {
+	width: 100%;
+	text-align: center;
+}
+
+li.beverage-button {
+	list-style-type: none;
+	float: left;
+	padding: 4px;
+}
+
+li.beverage-button img {
+	border: 1px solid black;
+	width: 400;
+	height: 200;
+}
+
+div#credit-div {
+	position:absolute; 
+	bottom:0;
+	left:0;
+	font-size: 20pt;
+	background: white;
+}
+
+div#message-div {
+	position:absolute; 
+	bottom:0;
+	right:0;
+	font-size: 20pt;
+	color: red;
+	background: white;
+}

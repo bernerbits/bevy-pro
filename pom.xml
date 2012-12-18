@@ -27,6 +27,7 @@
 	<modules>
 		<module>bevy-pro-hardware</module>
 		<module>bevy-pro-controller</module>
+		<module>bevy-pro-frontend</module>
 	</modules>
 	
 </project>
