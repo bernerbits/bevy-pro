@@ -26,21 +26,12 @@ function poll() {
 		poll();
 	})
 	.error(function(xhr,options,error) {
-		$('#message-div').text('Communication Error');
-		setTimeout(7000, "poll()");
-	});
-};
-function refresh() {
-	$.getJSON('index.json')
-	.success(function(json) {
-		update(json);
-		poll();
-	})
-	.error(function(xhr,options,error) {
-		$('#message-div').text('Communication Error');
+		if(error != '') {
+			$('#message-div').text('Communication Error');
+		}
 		setTimeout(7000, "poll()");
 	});
 };
 $(function() {
-	refresh();
+	poll();
 });

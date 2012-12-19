@@ -24,10 +24,19 @@
 		</pluginManagement>
 	</build>
 	
+	<repositories>
+		<repository>
+			<id>repository.springsource.milestone</id>
+			<name>SpringSource Milestone Repository</name>
+			<url>http://repo.springsource.org/milestone</url>
+		</repository>
+	</repositories>
+	
 	<modules>
 		<module>bevy-pro-hardware</module>
 		<module>bevy-pro-controller</module>
 		<module>bevy-pro-frontend</module>
+		<module>bevy-pro-h2database</module>
 	</modules>
 	
 </project>

@@ -16,5 +16,16 @@
 			<artifactId>bevy-pro-hardware</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>com.bernerbits.vandy.bevypro.db</groupId>
+			<artifactId>bevy-pro-h2database</artifactId>
+			<version>${project.version}</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jdbc</artifactId>
+			<version>3.2.0.RC2</version>
+		</dependency>
 	</dependencies>
 </project>

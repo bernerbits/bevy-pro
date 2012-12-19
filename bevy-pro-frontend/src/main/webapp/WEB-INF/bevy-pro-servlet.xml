@@ -8,10 +8,10 @@
                         http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
                         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd">
                         
-	<!-- Boilerplate Stuff. -->
+	<!-- Boilerplate Stuff -->
 	<ctx:annotation-config /> <!-- Lets us use @PostConstruct, @Autowired, etc. --> 
 
-	<!-- Machine Controller -->
+	<!-- Main MVC Controller -->
 	<bean id="dispenserController"
 		class="com.bernerbits.vandy.bevypro.controller.BeverageMachineController"
 		p:beverageDao-ref="beverageDao" p:hardwareController-ref="hardwareController" />
@@ -59,14 +59,18 @@
 			</list>
 		</property>
 	</bean>
-	<!-- FreeMarker View Resolver -->
-	
 
 	<!-- Control layer -->
-	<bean id="beverageDao" class="com.bernerbits.vandy.bevypro.dao.BeverageDaoImpl" />
+	<bean id="beverageDao" class="com.bernerbits.vandy.bevypro.dao.CachingBeverageDao" p:target-ref="actualBeverageDao" />
+	<bean id="actualBeverageDao" class="com.bernerbits.vandy.bevypro.dao.BeverageDaoImpl" p:jdbcTemplate-ref="jdbcTemplate" />
 	<bean id="hardwareController"
 		class="com.bernerbits.vandy.bevypro.controller.HardwareControllerImpl"
 		p:hardware-ref="hardwareService" />
+
+	<!-- Database layer -->
+	<bean id="h2Source" class="com.bernerbits.vandy.bevypro.db.H2DatabaseSource" />
+	<bean id="dataSource" factory-bean="h2Source" factory-method="getDataSource" />
+	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate" p:dataSource-ref="dataSource" />
 
 	<!-- Hardware layer -->
 	<bean id="hardwareService"

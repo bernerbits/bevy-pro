@@ -11,14 +11,6 @@
 	<packaging>war</packaging>
 	<name>Bevy-Pro jQuery/Spring front-end</name>
 
-	<repositories>
-		<repository>
-			<id>repository.springsource.milestone</id>
-			<name>SpringSource Milestone Repository</name>
-			<url>http://repo.springsource.org/milestone</url>
-		</repository>
-	</repositories>
-
 	<dependencies>
 		<!-- Using Spring 3.2 because of its support for DeferredResults, which 
 			will support long polling -->
