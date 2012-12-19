@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.bernerbits.vandy.bevypro.dao.BeverageDao;
+import com.bernerbits.vandy.bevypro.dao.PurchaseDao;
 import com.bernerbits.vandy.bevypro.format.MoneyFormatter;
 import com.bernerbits.vandy.bevypro.listener.ModelUpdateListener;
 import com.bernerbits.vandy.bevypro.model.Beverage;
@@ -27,6 +28,7 @@ import com.bernerbits.vandy.bevypro.model.BeverageMachineModel;
 @Controller public class BeverageMachineController implements ModelUpdateListener {
 
 	private HardwareController hardwareController;
+	private PurchaseDao purchaseDao;
 	private BeverageDao beverageDao;
 	private String message = "";
 	private MoneyFormatter moneyFormatter;
@@ -36,6 +38,9 @@ import com.bernerbits.vandy.bevypro.model.BeverageMachineModel;
 	}
 	public synchronized void setBeverageDao(BeverageDao beverageDao) {
 		this.beverageDao = beverageDao;
+	}
+	public synchronized void setPurchaseDao(PurchaseDao purchaseDao) {
+		this.purchaseDao = purchaseDao;
 	}
 	public synchronized void setMoneyFormatter(MoneyFormatter moneyFormatter) {
 		this.moneyFormatter = moneyFormatter;
@@ -67,7 +72,7 @@ import com.bernerbits.vandy.bevypro.model.BeverageMachineModel;
 			int difference = beverage.getUnitPrice() - hardwareController.getCredit();
 			message = "Please insert " + moneyFormatter.format(difference) + ".";
 		} else {
-			// purchaseController.purchase(beverage); // Track purchase
+			purchaseDao.purchase(beverage); // Track purchase
 			hardwareController.dispense(beverage);
 			message = "Vending...";
 		}
