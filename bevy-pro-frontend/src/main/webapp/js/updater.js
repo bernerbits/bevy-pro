@@ -11,7 +11,7 @@ function update(json) {
 			}
 		}
 	}
-	$('#credit-span').text(m.credit);
+	$('#credit-span').text(m.creditString);
 	if(m.credit == 0) {
 		$('#refund-button a').addClass('inactive');
 	} else {

@@ -14,7 +14,11 @@
 	<!-- Main MVC Controller -->
 	<bean id="dispenserController"
 		class="com.bernerbits.vandy.bevypro.controller.BeverageMachineController"
-		p:beverageDao-ref="beverageDao" p:hardwareController-ref="hardwareController" />
+		p:beverageDao-ref="beverageDao" p:hardwareController-ref="hardwareController" 
+		p:moneyFormatter-ref="moneyFormatter" />
+		
+	<!-- Money Formatter. Using US Cents; for foreign machines (euros, yen, pesos, etc.) this can be reimplemented.  -->
+	<bean id="moneyFormatter" class="com.bernerbits.vandy.bevypro.format.USCentsFormatter" />
 
 	<!-- FreeMarker Config -->
 	<bean id="freemarkerConfig"
@@ -46,11 +50,8 @@
 		</property>
 		<property name="viewResolvers">
 			<list>
-				<bean class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
-					<property name="cache" value="true" />
-					<property name="prefix" value="" />
-					<property name="suffix" value=".ftl" />
-				</bean>
+				<bean class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver"
+					p:cache="true" p:prefix="" p:suffix=".ftl" />
 			</list>
 		</property>
 		<property name="defaultViews">

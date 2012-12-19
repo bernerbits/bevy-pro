@@ -5,14 +5,16 @@ import java.util.List;
 public class BeverageMachineModel {
 	private List<Beverage> bevs;
 	private int credit;
+	private String creditString;
 	private String message;
 	
 	public BeverageMachineModel() {
 	}
 
-	public BeverageMachineModel(List<Beverage> bevs, int credit, String message) {
+	public BeverageMachineModel(List<Beverage> bevs, int credit, String creditString, String message) {
 		this.bevs = bevs;
 		this.credit = credit;
+		this.creditString = creditString;
 		this.message = message;
 	}
 
@@ -27,9 +29,17 @@ public class BeverageMachineModel {
 	public int getCredit() {
 		return credit;
 	}
-
+	
 	public void setCredit(int credit) {
 		this.credit = credit;
+	}
+	
+	public String getCreditString() {
+		return creditString;
+	}
+
+	public void setCreditString(String creditString) {
+		this.creditString = creditString;
 	}
 
 	public String getMessage() {
@@ -39,6 +49,5 @@ public class BeverageMachineModel {
 	public void setMessage(String message) {
 		this.message = message;
 	}
-	
 	
 }

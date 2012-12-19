@@ -13,7 +13,7 @@
 				<li id="bev-${bev.id}" class="beverage-button <#if bev.soldOut>sold-out</#if>"><a href="./dispense/${bev.id}.ftl"><img src="${bev.imageUrl}" /></a></li>
 			</#list>
 		</ul>
-		<div id="credit-div">Credit: <span id="credit-span">${m.credit}</span>&cent;</div>
+		<div id="credit-div">Credit: <span id="credit-span">${m.creditString}</span></div>
 		<div id="refund-button"><a href="./refund.ftl" class="<#if m.credit == 0>inactive</#if>">Refund</a></div>
 		<div id="message-div">${m.message}</div>
 	</body>
