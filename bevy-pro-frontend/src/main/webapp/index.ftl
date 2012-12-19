@@ -4,6 +4,7 @@
 		<h1>Bevy-Pro Beverage Dispenser</h1>
 		<script type="text/javascript" src="./js/jquery-1.8.3.min.js"></script>
 		<script type="text/javascript" src="./js/updater.js"></script>
+		<script type="text/javascript" src="./js/ajax.js"></script>
 		<link rel="stylesheet" type="text/css" href="./css/default.css"></link>
 		<link rel="stylesheet" type="text/css" href="./css/effects.css"></link>
 	</head>

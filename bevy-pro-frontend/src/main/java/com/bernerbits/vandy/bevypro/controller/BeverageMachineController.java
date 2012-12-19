@@ -62,8 +62,7 @@ import com.bernerbits.vandy.bevypro.model.BeverageMachineModel;
 		return model;
 	}
 
-	@RequestMapping(value="/dispense/{id}.ftl")
-	public synchronized String dispense(@PathVariable("id") int beverageId) {
+	private void dispense(int beverageId) {
 		Beverage beverage = beverageDao.getBeverage(beverageId);
 		hardwareController.check(beverage);
 		if(beverage.isSoldOut()) {
@@ -77,11 +76,35 @@ import com.bernerbits.vandy.bevypro.model.BeverageMachineModel;
 			message = "Vending...";
 		}
 		doModelUpdate();
-		return "redirect:/index.ftl";
 	}
 	
+	@RequestMapping(value="/dispense/{id}.json")
+	@ModelAttribute("m") // model root
+	public synchronized BeverageMachineModel dispenseJSON(@PathVariable("id") int beverageId) {
+		dispense(beverageId);
+		return getModel();
+	}
+
+	@RequestMapping(value="/dispense/{id}.ftl")
+	public synchronized String dispenseFreemarker(@PathVariable("id") int beverageId) {
+		dispense(beverageId);
+		return "redirect:/index.ftl";
+	}
+
+	@RequestMapping(value="/refund.json")
+	@ModelAttribute("m") // model root
+	public synchronized BeverageMachineModel refundJSON() {
+		refund();
+		return getModel();
+	}
+
 	@RequestMapping(value="/refund.ftl")
-	public synchronized String refund() {
+	public synchronized String refundFreemarker() {
+		refund();
+		return "redirect:/index.ftl";
+	}
+
+	private void refund() {
 		int credit = hardwareController.getCredit();
 		if(credit == 0) {
 			message = "No credit to refund.";
@@ -90,7 +113,6 @@ import com.bernerbits.vandy.bevypro.model.BeverageMachineModel;
 			message = "Refunded " + moneyFormatter.format(credit) + ".";
 		}
 		doModelUpdate();
-		return "redirect:/index.ftl";
 	}
 	
 	/**
