@@ -38,15 +38,13 @@ div#refund-button a {
 	background: #9999ff;
 }
 
-div#refund-button a:active {
+div#refund-button a:active, div#refund-button a.clicked {
 	background: #eeeeff;
 }
 
-div#refund-button a.inactive, div#refund-button a.inactive:active {
+div#refund-button a.inactive, div#refund-button a.inactive:active, div#refund-button a.inactive.clicked {
 	background: #777777;
 }
-
-
 
 div#credit-div {
 	position:absolute; 

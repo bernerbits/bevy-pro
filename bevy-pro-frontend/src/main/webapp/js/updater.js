@@ -11,13 +11,23 @@ function update(json) {
 			}
 		}
 	}
-	$('#credit-span').text(m.creditString);
+	if($('#credit-span').text() !== m.creditString) {
+		$('#credit-span').fadeOut('fast',function(){
+			$('#credit-span').text(m.creditString);
+			$('#credit-span').fadeIn('fast');
+		});
+	}
 	if(m.credit == 0) {
 		$('#refund-button a').addClass('inactive');
 	} else {
 		$('#refund-button a').removeClass('inactive');
 	}
-	$('#message-div').text(m.message);
+	if(m.message !== $('#message-div').text()) {
+		$('#message-div').fadeOut('fast',function(){
+			$('#message-div').text(m.message);
+			$('#message-div').fadeIn('fast');
+		});
+	}
 }
 function poll() {
 	$.getJSON('modelUpdate.json')
@@ -29,7 +39,7 @@ function poll() {
 		if(error != '') {
 			$('#message-div').text('Communication Error');
 		}
-		setTimeout(7000, "poll()");
+		setTimeout(poll, 7000);
 	});
 };
 $(function() {
