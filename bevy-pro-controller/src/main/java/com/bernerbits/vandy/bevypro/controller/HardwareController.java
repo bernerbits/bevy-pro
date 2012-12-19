@@ -2,6 +2,7 @@ package com.bernerbits.vandy.bevypro.controller;
 
 import java.util.List;
 
+import com.bernerbits.vandy.bevypro.listener.ModelUpdateListener;
 import com.bernerbits.vandy.bevypro.model.Beverage;
 
 public interface HardwareController {
@@ -40,5 +41,12 @@ public interface HardwareController {
 	 * @param beverage
 	 */
 	void refund();
+
+	/** 
+	 * Register a listener for when the hardware's state is updated.
+	 * 
+	 * @param modelUpdateListener
+	 */
+	void registerModelUpdateListener(ModelUpdateListener modelUpdateListener);
 
 }

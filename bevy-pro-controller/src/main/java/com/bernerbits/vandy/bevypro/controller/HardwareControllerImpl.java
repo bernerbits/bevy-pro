@@ -9,6 +9,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import com.bernerbits.vandy.bevypro.HardwareEventAdapter;
 import com.bernerbits.vandy.bevypro.HardwareService;
+import com.bernerbits.vandy.bevypro.listener.ModelUpdateListener;
 import com.bernerbits.vandy.bevypro.model.Beverage;
 import com.bernerbits.vandy.bevypro.model.Currency;
 
@@ -32,6 +33,7 @@ public class HardwareControllerImpl implements HardwareController {
 			public void handleCurrencyDeposit(int type, int value) {
 				credit.addAndGet(value);
 				deposit.add(new Currency(type,value));
+				notifyModelUpdate();
 			}
 			
 			@Override
@@ -39,6 +41,17 @@ public class HardwareControllerImpl implements HardwareController {
 				if(deposit.remove(new Currency(type,value))) {
 					credit.addAndGet(-value);
 				}
+				notifyModelUpdate();
+			}
+			
+			@Override
+			public void handleDispense(int slot, int amount) {
+				notifyModelUpdate();
+			}
+			
+			@Override
+			public void handleSodaChange() {
+				notifyModelUpdate();
 			}
 		});
 		this.credit = credit;
@@ -101,6 +114,21 @@ public class HardwareControllerImpl implements HardwareController {
 		//   because refund will modify the deposit.
 		for(Currency coinOrBill : new ArrayList<Currency>(deposit)) {
 			hardware.refund(coinOrBill.getType());
+		}
+	}
+	
+	// Listeners for hardware updates.
+	
+	private List<ModelUpdateListener> modelUpdateListeners = new ArrayList<ModelUpdateListener>();
+	
+	@Override
+	public void registerModelUpdateListener(ModelUpdateListener modelUpdateListener) {
+		modelUpdateListeners.add(modelUpdateListener);
+	}
+	
+	private void notifyModelUpdate() {
+		for(ModelUpdateListener listener : modelUpdateListeners) {
+			listener.doModelUpdate();
 		}
 	}
 }
