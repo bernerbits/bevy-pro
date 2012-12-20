@@ -183,6 +183,7 @@ public class SwingHardwareSimulator extends JFrame {
 			eventPanel.setLayout(eventGrid);
 			
 			final JTextArea eventLogArea = new JTextArea();
+			eventLogArea.setEditable(false);
 			
 			hardware.registerHardwareEventHandler(new HardwareEventHandler() {
 				
@@ -196,21 +197,25 @@ public class SwingHardwareSimulator extends JFrame {
 					sw.append("\n");
 					sw.flush();
 					eventLogArea.append(sw.toString());
+					eventLogArea.setCaretPosition(eventLogArea.getDocument().getLength());	
 				}
 				
 				@Override
 				public void handleDispense(int slot, int amount) {
 					eventLogArea.append("Slot/tap " + slot + " dispensed " + amount + " unit\n");
+					eventLogArea.setCaretPosition(eventLogArea.getDocument().getLength());	
 				}
 				
 				@Override
 				public void handleCurrencyRefund(int type, int value) {
 					eventLogArea.append("Refunded coin/bill worth " + value + "\n");
+					eventLogArea.setCaretPosition(eventLogArea.getDocument().getLength());	
 				}
 				
 				@Override
 				public void handleCurrencyDeposit(int type, int value) {
 					eventLogArea.append("Deposited coin/bill worth " + value + "\n");
+					eventLogArea.setCaretPosition(eventLogArea.getDocument().getLength());	
 				}
 				
 			});

@@ -1,6 +1,10 @@
 package com.bernerbits.vandy.bevypro.controller;
 
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -32,6 +36,7 @@ import com.bernerbits.vandy.bevypro.model.BeverageMachineModel;
 	private BeverageDao beverageDao;
 	private String message = "";
 	private MoneyFormatter moneyFormatter;
+	private ScheduledThreadPoolExecutor schedule;
 	
 	public synchronized void setHardwareController(HardwareController hardwareController) {
 		this.hardwareController = hardwareController;
@@ -49,6 +54,12 @@ import com.bernerbits.vandy.bevypro.model.BeverageMachineModel;
 	@PostConstruct
 	public synchronized void initialize() {
 		hardwareController.registerModelUpdateListener(this);
+		schedule = new ScheduledThreadPoolExecutor(1);
+	}
+	
+	@PreDestroy
+	public synchronized void destroy() {
+		schedule.shutdown();
 	}
 	
 	@RequestMapping(value="/index")
@@ -62,18 +73,41 @@ import com.bernerbits.vandy.bevypro.model.BeverageMachineModel;
 		return model;
 	}
 
+	/**
+	 * Set message and schedule a job to clear it.
+	 * 
+	 * @param tempMessage
+	 */
+	private void setTempMessage(final String tempMessage){
+		message = tempMessage;
+
+		// Schedule job to clear message after 2 seconds
+		schedule.schedule(new Runnable() {
+			@Override
+			public void run() {
+				synchronized(BeverageMachineController.this) {
+					// Clear message only if it hasn't changed yet.
+					if(message.equals(tempMessage)) {
+						message = "";
+						doModelUpdate();
+					}
+				}
+			}
+		}, 3, TimeUnit.SECONDS);
+	}
+	
 	private void dispense(int beverageId) {
 		Beverage beverage = beverageDao.getBeverage(beverageId);
 		hardwareController.check(beverage);
 		if(beverage.isSoldOut()) {
-			message = beverage.getName() + " is sold out.";
+			setTempMessage(beverage.getName() + " is sold out.");
 		} else if(hardwareController.getCredit() < beverage.getUnitPrice()) {
 			int difference = beverage.getUnitPrice() - hardwareController.getCredit();
-			message = "Please insert " + moneyFormatter.format(difference) + ".";
+			setTempMessage("Please insert " + moneyFormatter.format(difference) + ".");
 		} else {
 			purchaseDao.purchase(beverage); // Track purchase
 			hardwareController.dispense(beverage);
-			message = "Vending...";
+			setTempMessage("Vending...");
 		}
 		doModelUpdate();
 	}
@@ -107,10 +141,10 @@ import com.bernerbits.vandy.bevypro.model.BeverageMachineModel;
 	private void refund() {
 		int credit = hardwareController.getCredit();
 		if(credit == 0) {
-			message = "No credit to refund.";
+			setTempMessage("No credit to refund.");
 		} else {
 			hardwareController.refund();
-			message = "Refunded " + moneyFormatter.format(credit) + ".";
+			setTempMessage("Refunded " + moneyFormatter.format(credit) + ".");
 		}
 		doModelUpdate();
 	}
