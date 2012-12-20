@@ -29,19 +29,23 @@ function update(json) {
 		});
 	}
 }
+function refresh() {
+	updatePage('index.json');
+}
 function poll() {
-	$.getJSON('modelUpdate.json')
+	updatePage('modelUpdate.json');
+}
+function updatePage(page) {
+	$.getJSON(page)
 	.success(function(json) {
 		update(json);
 		poll();
 	})
 	.error(function(xhr,options,error) {
-		if(error != '') {
-			$('#message-div').text('Communication Error');
-		}
-		setTimeout(poll, 7000);
+		$('#message-div').text('Communication Error');
+		setTimeout(refresh, 7000);
 	});
-};
+}
 $(function() {
 	poll();
 });
