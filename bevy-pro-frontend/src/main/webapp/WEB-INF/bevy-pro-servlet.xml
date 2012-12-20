@@ -17,7 +17,7 @@
 		p:beverageDao-ref="beverageDao" p:hardwareController-ref="hardwareController" 
 		p:purchaseDao-ref="purchaseDao" p:moneyFormatter-ref="moneyFormatter" />
 		
-	<!-- Money Formatter. Using US Cents; for foreign machines (euros, yen, pesos, etc.) this can be reimplemented.  -->
+	<!-- Money Formatter. Using US Cents; for non-US machines this can be reimplemented.  -->
 	<bean id="moneyFormatter" class="com.bernerbits.vandy.bevypro.format.USCentsFormatter" />
 
 	<!-- FreeMarker Config -->
@@ -68,6 +68,19 @@
 	<bean id="hardwareController"
 		class="com.bernerbits.vandy.bevypro.controller.HardwareControllerImpl"
 		p:hardware-ref="hardwareService" />
+
+	<!-- Periodic beverage cache invalidation (60 seconds) -->
+	<bean id="cacheInvalidateJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean" 
+		p:targetObject-ref="beverageDao" p:targetMethod="invalidateCache" />
+	<bean id="cacheInvalidateTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean" 
+		p:jobDetail-ref="cacheInvalidateJob" p:startDelay="60000" p:repeatInterval="60000" />
+	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+	    <property name="triggers">
+	        <list>
+	            <ref bean="cacheInvalidateTrigger"/>
+	        </list>
+	    </property>
+	</bean>
 
 	<!-- Database layer -->
 	<bean id="h2Source" class="com.bernerbits.vandy.bevypro.db.H2DatabaseSource" />

@@ -61,6 +61,12 @@
 			<artifactId>jackson-mapper-asl</artifactId>
 			<version>1.9.9</version>
 		</dependency>
+		<!-- Quartz for periodic cache invalidation -->
+		<dependency>
+			<groupId>org.quartz-scheduler</groupId>
+			<artifactId>quartz</artifactId>
+			<version>1.8.6</version>
+		</dependency>
 		<!-- Local project dependencies -->
 		<dependency>
 			<groupId>com.bernerbits.vandy.bevypro.controller</groupId>
